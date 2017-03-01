@@ -26,7 +26,10 @@
   ],
   "license": "MIT",
   "author": "JD Wuarin <john.dwuarin@gmail.com>",
-  "repository": "https://github.com/botmasterai/botmaster-messenger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/botmasterai/botmaster-messenger"
+  },
   "bugs": {
     "url": "https://github.com/botmasterai/botmaster-messenger/issues"
   },
