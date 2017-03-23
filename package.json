@@ -34,24 +34,28 @@
     "url": "https://github.com/botmasterai/botmaster-messenger/issues"
   },
   "dependencies": {
-    "botmaster": "^3.0.0"
+    "body-parser": "^1.17.1",
+    "botmaster": "^3.0.5",
+    "crypto": "^0.0.3",
+    "debug": "^2.6.3",
+    "express": "^4.15.2",
+    "lodash": "^4.17.4",
+    "request-promise": "^4.2.0"
   },
   "engines": {
     "node": ">=4.x.x <8.0.0"
   },
   "devDependencies": {
-    "botmaster-test-fixtures": "^1.0.0",
-    "chai": "^3.5.0",
+    "ava": "^0.18.2",
+    "botmaster-test-fixtures": "^2.1.0",
     "coveralls": "^2.11.16",
-    "eslint": "^3.16.1",
+    "eslint": "^3.17.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-ava": "^4.2.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "istanbul": "^0.4.5",
-    "jsdoc": "^3.4.3",
-    "mocha": "^3.2.0",
-    "mocha-eslint": "^3.0.1",
-    "nodemon": "^1.11.0"
+    "jsdoc": "^3.4.2",
+    "nyc": "^10.1.2"
   }
 }
