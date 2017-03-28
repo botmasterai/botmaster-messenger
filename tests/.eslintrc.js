@@ -9,5 +9,6 @@ module.exports = {
     semi: [2, 'always'],
     'no-param-reassign': 'off',
     'no-restricted-syntax': 'off',
+    'strict': 'off',
   },
 };

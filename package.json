@@ -1,20 +1,42 @@
 {
   "name": "botmaster-messenger",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "The Facebook Messenger Botmaster integration",
   "main": "lib/index.js",
   "scripts": {
-    "s": "DEBUG=botmaster:botmaster nodemon --legacy-watch ./example_jd.js",
-    "start": "node ./example_jd.js",
-    "test": "istanbul cover _mocha -- --recursive tests",
-    "tests": "mocha --recursive tests",
+    "s": "DEBUG=botmaster:* nodemon --legacy-watch ./example_jd.js",
+    "test": "export NODE_ENV=test; nyc --reporter=lcov --reporter=html ava",
+    "test-debug": "export NODE_ENV=test DEBUG=botmaster:*; nyc --reporter=lcov --reporter=html ava",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "postversion": "git push && git push --tags && rm -rf build/temp",
-    "tunnel": "( while true; do lt -p 3000 -s watsonchatdemo; done; )",
-    "jsdoc": "jsdoc ./lib ./lib/bot_types"
+    "jsdoc": "jsdoc ./lib ./lib/bot_types",
+    "report": "nyc report",
+    "tunnel": "( while true; do lt -p 3000 -s watsonchatdemo; done; )"
   },
   "directories": {
     "tests": "test"
+  },
+  "ava": {
+    "files": [
+      "tests/**/*.js"
+    ],
+    "source": [],
+    "match": [],
+    "serial": true,
+    "verbose": true,
+    "failFast": false,
+    "tap": false,
+    "powerAssert": false
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "exclude": [
+      "tests"
+    ]
   },
   "keywords": [
     "bot",
@@ -35,7 +57,7 @@
   },
   "dependencies": {
     "body-parser": "^1.17.1",
-    "botmaster": "^3.0.5",
+    "botmaster": "^3.0.6",
     "crypto": "^0.0.3",
     "debug": "^2.6.3",
     "express": "^4.15.2",
