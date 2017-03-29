@@ -8,7 +8,7 @@
 This is the FB messenger integration for botmaster. It allows you to use your 
 botmaster bot on FB Messenger
 
-This package works with botmaster ^3.0.5;
+This package works with botmaster v3;
 ---
 
 Botmaster is a lightweight chatbot framework. Its purpose is to integrate your existing chatbot into a variety of messaging channels - currently Facebook Messenger, Twitter DM and Telegram.
