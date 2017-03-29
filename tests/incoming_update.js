@@ -1,11 +1,9 @@
 import test from 'ava';
-import { incomingUpdateFixtures,
-         attachmentFixtures } from 'botmaster-test-fixtures';
+import { incomingUpdateFixtures } from 'botmaster-test-fixtures';
 import Botmaster from 'botmaster';
 import request from 'request-promise';
 import config from './_config';
 import { getMessengerSignatureHeader } from './_tests_utils';
-
 
 import MessengerBot from '../lib';
 
@@ -41,7 +39,7 @@ test.afterEach((t) => {
   });
 });
 
-test.only('/webhook should respond with an error in the body if signature is absent', (t) => {
+test('/webhook should respond with an error in the body if signature is absent', (t) => {
   t.plan(1);
 
   return request(t.context.requestOptions)
@@ -50,7 +48,7 @@ test.only('/webhook should respond with an error in the body if signature is abs
   });
 });
 
-test.only('/webhook should respond with an error in the body if signature is wrong', (t) => {
+test('/webhook should respond with an error in the body if signature is wrong', (t) => {
   t.plan(1);
 
   t.context.requestOptions.body.entry[0].messaging.push(
@@ -66,7 +64,7 @@ test.only('/webhook should respond with an error in the body if signature is wro
   });
 });
 
-test.only('/webhook should call incoming middleware when update is well formatted', (t) => {
+test('/webhook should call incoming middleware when update is well formatted', (t) => {
   t.plan(3);
 
   const textUpdate = incomingUpdateFixtures.textUpdate(null);

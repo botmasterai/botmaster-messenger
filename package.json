@@ -26,7 +26,8 @@
     "verbose": true,
     "failFast": false,
     "tap": false,
-    "powerAssert": false
+    "powerAssert": false,
+    "timeout": "10s"
   },
   "nyc": {
     "check-coverage": true,
@@ -57,7 +58,7 @@
   },
   "dependencies": {
     "body-parser": "^1.17.1",
-    "botmaster": "^3.0.6",
+    "botmaster": "^3.0.7",
     "crypto": "^0.0.3",
     "debug": "^2.6.3",
     "express": "^4.15.2",
@@ -78,6 +79,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
     "jsdoc": "^3.4.2",
+    "nodemon": "^1.11.0",
     "nyc": "^10.1.2"
   }
 }
