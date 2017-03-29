@@ -1,6 +1,6 @@
 {
   "name": "botmaster-messenger",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "The Facebook Messenger Botmaster integration",
   "main": "lib/index.js",
   "scripts": {
