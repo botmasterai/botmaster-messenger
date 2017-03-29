@@ -1,9 +1,5 @@
 import test from 'ava';
-import { incomingUpdateFixtures } from 'botmaster-test-fixtures';
-import Botmaster from 'botmaster';
-import request from 'request-promise';
 import config from './_config';
-import { getMessengerSignatureHeader } from './_tests_utils';
 
 import MessengerBot from '../lib';
 

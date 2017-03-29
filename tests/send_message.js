@@ -10,7 +10,7 @@ test.beforeEach((t) => {
   });
 });
 
-test('#sendTextMessage', async (t) => {
+test('#sendTextMessage works with correct user id', async (t) => {
   t.plan(2);
 
   const userId = config.messengerUserId();
