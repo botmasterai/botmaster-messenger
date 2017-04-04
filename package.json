@@ -13,9 +13,6 @@
     "report": "nyc report",
     "tunnel": "( while true; do lt -p 3000 -s watsonchatdemo; done; )"
   },
-  "directories": {
-    "tests": "test"
-  },
   "ava": {
     "files": [
       "tests/**/*.js"
@@ -66,7 +63,7 @@
     "request-promise": "^4.2.0"
   },
   "engines": {
-    "node": ">=4.x.x <8.0.0"
+    "node": ">=4.x.x"
   },
   "devDependencies": {
     "ava": "^0.18.2",

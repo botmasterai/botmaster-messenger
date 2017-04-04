@@ -8,15 +8,62 @@
 This is the FB messenger integration for botmaster. It allows you to use your 
 botmaster bot on FB Messenger
 
-This package works with botmaster v3;
----
-
 Botmaster is a lightweight chatbot framework. Its purpose is to integrate your existing chatbot into a variety of messaging channels - currently Facebook Messenger, Twitter DM and Telegram.
 
 ## Documentation
 
-Find the whole documentation for the framework on: http://botmasterai.com/
-Find this bot class specific documentation on: http://botmasterai.com/getting-started/messenger-setup/
+Find the whole documentation for the Botmaster framework on: http://botmasterai.com/documentation/latest
+
+## Installing
+
+```bash
+yarn add botmaster-messenger
+```
+
+or
+
+```bash
+npm install --save botmaster-messenger
+```
+
+## Getting your Credentials
+
+If you don't already have these, follow the steps **1-4** on the Facebook Messenger guide:
+https://developers.facebook.com/docs/messenger-platform/guides/quick-start
+
+In **step 2**, where you setup your webhook, no need to code anything. Just specify the webhook, enter any secure string you want as a verify token(`verifyToken`) and copy that value in the settings object. Also, click on whichever message [those are "update"s using botmaster semantics] type you want to receive from Messenger (`message_deliveries`, `messages`, `message_postbacks` etc...).
+
+To find your Facebook App Secret (`fbAppSecret`), navigate to your apps dashboard and under `App Secret` click show, enter your password if prompted and then there it is.
+
+## Code
+
+```js
+const Botmaster = require('botmaster');
+const MessengerBot = require('botmaster-messenger');
+const botmaster = new Botmaster();
+
+const messengerSettings = {
+  credentials: {
+    verifyToken: 'YOUR verifyToken',
+    pageToken: 'YOUR pageToken',
+    fbAppSecret: 'YOUR fbAppSecret',
+  },
+  webhookEndpoint: '/webhook1234',
+};
+
+const messengerBot = new MessengerBot(messengerSettings);
+
+botmaster.addBot(messengerBot);
+
+botmaster.on('update', (bot, update) => {
+  bot.reply(update, 'Hello world!');
+});
+```
+
+## Webhooks
+
+If you are not too sure how webhooks work and/or how to get them to run locally, go to [webhooks](/getting-started/webhooks) to read some more.
+
 
 ## License
 
