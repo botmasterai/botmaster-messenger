@@ -48,15 +48,19 @@ const messengerSettings = {
     pageToken: 'YOUR pageToken',
     fbAppSecret: 'YOUR fbAppSecret',
   },
-  webhookEndpoint: '/webhook1234',
+  webhookEndpoint: 'webhook1234',
 };
 
 const messengerBot = new MessengerBot(messengerSettings);
 
 botmaster.addBot(messengerBot);
 
-botmaster.on('update', (bot, update) => {
-  bot.reply(update, 'Hello world!');
+botmaster.use({
+  type: 'incoming',
+  name: 'my-middleware',
+  controller: (bot, update) => {
+    return bot.reply(update, 'Hello world!');
+  }
 });
 ```
 
