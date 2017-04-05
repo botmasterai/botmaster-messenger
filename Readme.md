@@ -176,7 +176,7 @@ Adds greeting text to your bot. Read more here:
 -   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
 
-#### getGreetingText
+#### \_getGreetingText
 
 get greeting text from your bot. Read more here:
 <https://developers.facebook.com/docs/messenger-platform/messenger-profile/greeting-text>
@@ -240,7 +240,7 @@ Adds account Linking url to your bot. Read more here:
 -   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
 
-#### getAccountLinkingUrl
+#### \_getAccountLinkingUrl
 
 get account linking url from your bot. Read more here:
 <https://developers.facebook.com/docs/messenger-platform/messenger-profile/account-linking-url>
@@ -271,7 +271,7 @@ Adds target audience url to your bot. Read more here:
 -   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
 
-#### getTargetAudience
+#### \_getTargetAudience
 
 get target audience url from your bot. Read more here:
 <https://developers.facebook.com/docs/messenger-platform/messenger-profile/target-audience>
@@ -290,14 +290,6 @@ removes target audience to your bot. Read more here:
 
 -   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
-
-#### \_\_getUserInfo
-
-see botmaster's BaseBot #getUserInfo
-
-**Parameters**
-
--   `userId` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** id of the user whose information is requested
 
 ## License
 

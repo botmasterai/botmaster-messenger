@@ -94,7 +94,7 @@ test('greeting text', async (t) => {
 
   const body = await bot._setGreetingText(greeting);
   t.is(body.result, 'success');
-  const getBody = await bot.getGreetingText();
+  const getBody = await bot._getGreetingText();
   t.deepEqual(getBody.data[0].greeting, greeting);
   const removeBody = await bot._removeGreetingText();
   t.is(removeBody.result, 'success');
@@ -137,7 +137,7 @@ test('account linking', async (t) => {
   t.is(body.result, 'success');
   const response = await bot._setAccountLinkingUrl(accountLInkingUrl, true);
   t.is(response.body.result, 'success');
-  const getBody = await bot.getAccountLinkingUrl();
+  const getBody = await bot._getAccountLinkingUrl();
   t.is(getBody.data[0].account_linking_url, accountLInkingUrl);
   const removeBody = await bot._removeAccountLinkingUrl();
   t.is(removeBody.result, 'success');
@@ -181,7 +181,7 @@ test('target audience', async (t) => {
 
   const body = await bot._setTargetAudience(targetAudience);
   t.is(body.result, 'success');
-  const getBody = await bot.getTargetAudience();
+  const getBody = await bot._getTargetAudience();
   t.deepEqual(getBody.data[0].target_audience, targetAudience);
   const removeBody = await bot._removeTargetAudience();
   t.is(removeBody.result, 'success');
