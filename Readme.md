@@ -301,17 +301,23 @@ In order to contribute, you will need to make sure the tests run on your local m
 
 const config = {
   messengerCredentials: () => ({
-    verifyToken: 'YOUR_VERIFY_TOKEN",
+    verifyToken: 'YOUR_VERIFY_TOKEN',
     pageToken: 'YOUR_PAGE_TOKEN',
     fbAppSecret: 'YOUR_FB_APP_SECRET',
   }),
 
-  messengerUserId: () => 'YOUR_USER_ID_FOR_THIS_PAGE', // who to send messages to in tests (that's me again, only in messenger...)
+  messengerUserId: () => 'YOUR_USER_ID_FOR_THIS_PAGE', // who to send messages to in tests (most probably one of your accounts)
   messengerBotId: () => 'YOUR_BOT_ID', // the id of the bot (as sent in message updates). I.E. your page id
 };
 
 module.exports = config;
 ```
+
+This file is gitignored so won't be commited.
+
+2. Just run the tests
+
+`yarn test`
 
 ## License
 
