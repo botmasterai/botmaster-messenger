@@ -291,6 +291,28 @@ removes target audience to your bot. Read more here:
 -   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
 
+## Contributing
+
+In order to contribute, you will need to make sure the tests run on your local machine. To do so, follow these steps:
+
+1. Create a `./tests/_config.js` file that looks like this:
+```js
+'use strict';
+
+const config = {
+  messengerCredentials: () => ({
+    verifyToken: 'YOUR_VERIFY_TOKEN",
+    pageToken: 'YOUR_PAGE_TOKEN',
+    fbAppSecret: 'YOUR_FB_APP_SECRET',
+  }),
+
+  messengerUserId: () => 'YOUR_USER_ID_FOR_THIS_PAGE', // who to send messages to in tests (that's me again, only in messenger...)
+  messengerBotId: () => 'YOUR_BOT_ID', // the id of the bot (as sent in message updates). I.E. your page id
+};
+
+module.exports = config;
+```
+
 ## License
 
 This library is licensed under the MIT [license](LICENSE)
