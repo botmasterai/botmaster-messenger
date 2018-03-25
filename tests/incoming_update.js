@@ -102,6 +102,3 @@ test('/webhook should call incoming middleware when update is well formatted', (
 
 // TODO Look into returning promise only on send/read/delivered. Would probably
 // need to be a middleware solution built on top of botmaster-storage (or something)
-
-
-
