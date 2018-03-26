@@ -83,7 +83,7 @@ const messengerSettings = {
         pageToken: 'YOUR_PAGE_TOKEN_1',
       },
       'YOUR_PAGE_ID_2': {
-        pageToken: 'YOUR_PAGE_ID_2',
+        pageToken: 'YOUR_PAGE_TOKEN_2',
       },
     },
   },
@@ -101,7 +101,7 @@ botmaster.use({
     const messageToSend = bot.createOutgoingMessageFor(update.sender.id); // or any other page-scoped userId you know is using your page
     messageToSend.addText('Hello World');
     messageToSend.sender = {
-      id: 'PAGE_ID_2', // or whichever page id you wish to send the message from.
+      id: update.recipient.id, // or whichever page id you wish to send the message from.
     };
     return bot.sendMessage(messageToSend);
   }
@@ -435,7 +435,7 @@ const config = {
         pageToken: 'YOUR_PAGE_TOKEN_1',
       },
       'YOUR_PAGE_ID_2': {
-        pageToken: 'YOUR_PAGE_ID_2',
+        pageToken: 'YOUR_PAGE_TOKEN_2',
       },
     },
   }),
@@ -447,7 +447,7 @@ const config = {
 module.exports = config;
 ```
 
-This file is gitignored so won't be commited.
+This file is gitignored so won't be committed.
 
 2.  Just run the tests
 
