@@ -37,6 +37,8 @@ To find your Facebook App Secret (`fbAppSecret`), navigate to your apps dashboar
 
 ## Code
 
+Example code using a single page for a bot. When using a single page, botmaster can be used
+as expected.
 ```js
 const Botmaster = require('botmaster');
 const MessengerBot = require('botmaster-messenger');
@@ -64,6 +66,48 @@ botmaster.use({
 });
 ```
 
+multi-page bot example
+```js
+const Botmaster = require('botmaster');
+const MessengerBot = require('botmaster-messenger');
+const botmaster = new Botmaster();
+
+const messengerSettings = {
+  credentials: {
+    verifyToken: 'YOUR verifyToken',
+    pages: {
+      'PAGE_ID_1': { pageToken: 'PAGE_TOKEN_1' },
+      'PAGE_ID_2': { pageToken: 'PAGE_TOKEN_2' }
+    }
+    fbAppSecret: 'YOUR fbAppSecret',
+  },
+  webhookEndpoint: 'webhook1234',
+};
+
+const messengerBot = new MessengerBot(messengerSettings);
+
+botmaster.addBot(messengerBot);
+
+botmaster.use({
+  type: 'incoming',
+  name: 'my-middleware',
+  controller: (bot, update) => {
+    const messageToSend = bot.createOutgoingMessageFor(userId);
+    messageToSend.addText('Hello World');
+    messageToSend.sender = {
+      id: 'PAGE_ID_2', // or whichever page id you wish to send the message from.
+    };
+    return bot.sendMessage(messageToSend);
+  }
+});
+```
+
+With a multi-page bot, you will not be able to use the helper sender functions; namely,
+reply, and all the send* helper methods attached to bot instances. However, ever since the
+OutgoingMessage class was made accessible via the `bot.createOutgoingMessage`
+and `bot.createOutgoingMessageFor` methods, it is easier to use that and its helper functions
+regardless of whether the bot is multi-page or not.
+
 ## Webhooks
 
 If you are not too sure how webhooks work and/or how to get them to run locally, go to [webhooks](/getting-started/webhooks) to read some more.
@@ -79,25 +123,46 @@ If you are not too sure how webhooks work and/or how to get them to run locally,
 The class to use if you want to add support for FB Messenger in your
 Botmaster project.
 
+**Parameters**
+
+-   `settings`  
+
 #### constructor
 
 Constructor to the MessengerBot class
 
 **Parameters**
 
--   `settings` **[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** MessengerBot take a settings
+-   `settings` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** MessengerBot take a settings
     object as first param.
 
 **Examples**
 
 ```javascript
-const messengerBot = new MessengerBot({ // e.g. MessengerBot
-  credentials:   credentials: {
+// single page bot
+const messengerBot = new MessengerBot({
+  credentials: {
     verifyToken: 'YOUR verifyToken',
     pageToken: 'YOUR pageToken',
     fbAppSecret: 'YOUR fbAppSecret',
   },
-  webhookEnpoint: 'someEndpoint'
+  webhookEndpoint: 'someEndpoint'
+})
+```
+
+```javascript
+// multi-page bot
+const messengerBot = new MessengerBot({
+  credentials: {
+    verifyToken: 'YOUR verifyToken',
+    pages: {
+      [pageId1]: { pageToken: 'pageToken1'},
+      [pageId2]: { pageToken: 'pageToken2},
+      etc...
+    }
+    fbAppSecret: 'YOUR fbAppSecret',
+  },
+  webhookEndpoint: 'someEndpoint'
 })
 ```
 
@@ -108,10 +173,12 @@ Adds get start button to your bot. Read more here:
 
 **Parameters**
 
--   `getStartedButtonPayload` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The payload of the postback
+-   `getStartedButtonPayload` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The payload of the postback
     you will get when a user clicks on the get started button.
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getGetStartedButton
 
@@ -120,8 +187,10 @@ gets get started button payload from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removeGetStartedButton
 
@@ -130,8 +199,10 @@ removes get started button from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_setPersistentMenu
 
@@ -140,10 +211,12 @@ Adds account Linking to your bot. Read more here:
 
 **Parameters**
 
--   `persistentMenu` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** persistent menu to use for your messenger
+-   `persistentMenu` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** persistent menu to use for your messenger
     bot
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getPersistentMenu
 
@@ -152,8 +225,10 @@ get persistent menu from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removePersistentMenu
 
@@ -162,8 +237,10 @@ removes persistent menu from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_setGreetingText
 
@@ -172,9 +249,11 @@ Adds greeting text to your bot. Read more here:
 
 **Parameters**
 
--   `greetingObject` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** greeting objects. Can be localized.
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `greetingObject` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** greeting objects. Can be localized.
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getGreetingText
 
@@ -183,8 +262,10 @@ get greeting text from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removeGreetingText
 
@@ -193,8 +274,10 @@ removes greeting text from bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_setWhitelistedDomains
 
@@ -203,9 +286,11 @@ Adds white listed domains to your bot. Read more here:
 
 **Parameters**
 
--   `domainNameLists` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** List of domains to whitelist.
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `domainNameLists` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** List of domains to whitelist.
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getWhitelistedDomains
 
@@ -214,8 +299,10 @@ get whitelisted domains from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removeWhitelistedDomains
 
@@ -224,9 +311,11 @@ removes whitelisted domains from bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
-    resolve with full response or not. By default, this is false
 -   `domainNameLists`  
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+    resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_setAccountLinkingUrl
 
@@ -235,10 +324,12 @@ Adds account Linking url to your bot. Read more here:
 
 **Parameters**
 
--   `accountLinkingURL` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Authentication callback URL.
+-   `accountLinkingURL` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Authentication callback URL.
     Must use https protocol.
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getAccountLinkingUrl
 
@@ -247,8 +338,10 @@ get account linking url from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removeAccountLinkingUrl
 
@@ -257,8 +350,9 @@ removes account Linking to your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId`  
 
 #### \_setTargetAudience
 
@@ -267,9 +361,11 @@ Adds target audience url to your bot. Read more here:
 
 **Parameters**
 
--   `targetAudience` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `targetAudience` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_getTargetAudience
 
@@ -278,8 +374,10 @@ get target audience url from your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
 
 #### \_removeTargetAudience
 
@@ -288,14 +386,27 @@ removes target audience to your bot. Read more here:
 
 **Parameters**
 
--   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
+-   `resolveWithFullResponse` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** specify wether request should
     resolve with full response or not. By default, this is false
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** specify the page you want to set the get started button
+    for. This iw valid only if you are using botmaster-messenger with multiple pages
+
+#### \_getUserInfoFromPage
+
+get the info for a certain user from a certain page
+
+**Parameters**
+
+-   `userId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** id of the user whose information is requested
+-   `pageId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** specify the page you want to get the user info from.
+    Different pages may have different rights.
 
 ## Contributing
 
 In order to contribute, you will need to make sure the tests run on your local machine. To do so, follow these steps:
 
-1. Create a `./tests/_config.js` file that looks like this:
+1.  Create a `./tests/_config.js` file that looks like this:
+
 ```js
 'use strict';
 
@@ -304,6 +415,19 @@ const config = {
     verifyToken: 'YOUR_VERIFY_TOKEN',
     pageToken: 'YOUR_PAGE_TOKEN',
     fbAppSecret: 'YOUR_FB_APP_SECRET',
+  }),
+
+  messengerMultiPageCredentials: () => ({
+    verifyToken: 'YOUR_VERIFY_TOKEN',
+    fbAppSecret: 'YOUR_FB_APP_SECRET',
+    pages: {
+      'YOUR_PAGE_ID_1': {
+        pageToken: 'YOUR_PAGE_TOKEN_1',
+      },
+      'YOUR_PAGE_ID_2': {
+        pageToken: 'YOUR_PAGE_ID_2',
+      },
+    },
   }),
 
   messengerUserId: () => 'YOUR_USER_ID_FOR_THIS_PAGE', // who to send messages to in tests (most probably one of your accounts)
@@ -315,7 +439,7 @@ module.exports = config;
 
 This file is gitignored so won't be commited.
 
-2. Just run the tests
+2.  Just run the tests
 
 `yarn test`
 
