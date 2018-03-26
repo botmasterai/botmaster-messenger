@@ -1,8 +1,9 @@
 language: node_js
 node_js:
+- '9'
+- '8'
 - '7'
 - '6'
-- '5'
 - '4'
 before_install:
 - openssl aes-256-cbc -K $encrypted_2df9b7aa015f_key -iv $encrypted_2df9b7aa015f_iv

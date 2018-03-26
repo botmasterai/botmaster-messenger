@@ -62,7 +62,7 @@
     "request-promise": "^4.2.0"
   },
   "engines": {
-    "node": ">=4.x.x"
+    "node": "4.x.x || >=6.x.x"
   },
   "devDependencies": {
     "ava": "^0.25.0",
