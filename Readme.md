@@ -98,21 +98,19 @@ botmaster.use({
   type: 'incoming',
   name: 'my-middleware',
   controller: (bot, update) => {
+    // 1) if you simply want to respond as the page that received the update.
+    bot.reply(update, 'Hello World');
+    // 2) or if you want to specify another page to response as, you can always set
+    // the messageToSend.sender.id param as some other pageId as such.
     const messageToSend = bot.createOutgoingMessageFor(update.sender.id); // or any other page-scoped userId you know is using your page
     messageToSend.addText('Hello World');
     messageToSend.sender = {
-      id: update.recipient.id, // or whichever page id you wish to send the message from.
+      id: 'SOME_PAGE_ID', // update.sender.id would be this page. But you can set it to something else.
     };
     return bot.sendMessage(messageToSend);
   }
 });
 ```
-
-With a multi-page bot, you will not be able to use the helper sender functions; namely,
-reply, and all the send\* helper methods attached to bot instances. However, ever since the
-OutgoingMessage class was made accessible via the `bot.createOutgoingMessage`
-and `bot.createOutgoingMessageFor` methods, it is easier to use that and its helper functions
-regardless of whether the bot is multi-page or not.
 
 ## Webhooks
 

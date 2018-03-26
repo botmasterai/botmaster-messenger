@@ -39,7 +39,7 @@ test('#getUserInfo fails for multi-page bot', async (t) => {
   }
 });
 
-test('#_getUserInfoFromPage fails for multi-page without pageId', async (t) => {
+test('#_getUserInfoFromPage fails for multi-page without pageId outside of middleware', async (t) => {
   t.plan(1);
 
   const userId = config.messengerUserId();
@@ -57,7 +57,7 @@ test('#getUserInfo works for multi-page with pageId', async (t) => {
 
   const userId = config.messengerUserId();
   const bot = t.context.multiPageBot;
-  const pageId = Object.keys(config.messengerMultiPageCredentials().pages)[0];
+  const pageId = Object.keys(config.messengerMultiPageCredentials().pages)[1];
 
   const userInfo = await bot._getUserInfoFromPage(userId, pageId);
   delete userInfo.profile_pic;

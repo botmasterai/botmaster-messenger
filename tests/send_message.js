@@ -27,7 +27,7 @@ test('#sendTextMessage works with correct user id using single page', async (t) 
   t.is(body.recipient_id, userId);
 });
 
-test('#sendTextMessage does not work for multi=page bot missing sender.id', async (t) => {
+test('#sendTextMessage does not work for multi=page bot missing sender.id outside of middleware', async (t) => {
   t.plan(1);
 
   const userId = config.messengerUserId();
@@ -43,7 +43,7 @@ test('#sendTextMessage does not work for multi=page bot missing sender.id', asyn
   }
 });
 
-test('#sendTextMessage works for multi-page bot with sender.id', async (t) => {
+test('#sendTextMessage works for multi-page bot with sender.id outside of middleware', async (t) => {
   t.plan(1);
 
   const userId = config.messengerUserId();
@@ -52,7 +52,7 @@ test('#sendTextMessage works for multi-page bot with sender.id', async (t) => {
   const messageToSend = bot.createOutgoingMessageFor(userId);
   messageToSend.addText('Hello');
   messageToSend.sender = {
-    id: Object.keys(config.messengerMultiPageCredentials().pages)[0],
+    id: Object.keys(config.messengerMultiPageCredentials().pages)[1],
   };
 
   const body = await bot.sendMessage(messageToSend);

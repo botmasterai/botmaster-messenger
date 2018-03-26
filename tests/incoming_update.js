@@ -16,6 +16,13 @@ test.beforeEach((t) => {
       webhookEndpoint: 'webhook',
     });
     t.context.botmaster.addBot(bot);
+    t.context.multiPageBotmaster = new Botmaster({ port: 3001 });
+    const multiPageBot = new MessengerBot({
+      id: 'multi_page_bot_id',
+      credentials: config.messengerMultiPageCredentials(),
+      webhookEndpoint: 'webhook',
+    });
+    t.context.multiPageBotmaster.addBot(multiPageBot);
     t.context.requestBody = {
       object: 'page',
       entry: [{
@@ -30,13 +37,38 @@ test.beforeEach((t) => {
       json: true,
       resolveWithFullResponse: true,
     };
-    t.context.botmaster.on('listening', resolve);
+    t.context.multiPageRequestOptions = {
+      method: 'POST',
+      uri: 'http://localhost:3001/messenger/webhook',
+      body: t.context.requestBody,
+      json: true,
+      resolveWithFullResponse: true,
+    };
+    // couldn't be bothered to do a function for that...
+    let listeningServers = 0;
+    t.context.botmaster.on('listening', () => {
+      if (listeningServers === 1) resolve();
+      else listeningServers += 1;
+    });
+    t.context.multiPageBotmaster.on('listening', () => {
+      if (listeningServers === 1) resolve();
+      else listeningServers += 1;
+    });
   });
 });
 
 test.afterEach((t) => {
   return new Promise((resolve) => {
-    t.context.botmaster.server.close(resolve);
+    let closedServers = 0;
+    // yes, this could be a function called in both cases...
+    t.context.botmaster.server.close(() => {
+      if (closedServers === 1) resolve();
+      else closedServers += 1;
+    });
+    t.context.multiPageBotmaster.server.close(() => {
+      if (closedServers === 1) resolve();
+      else closedServers += 1;
+    });
   });
 });
 
@@ -92,6 +124,43 @@ test('/webhook should call incoming middleware when update is well formatted', (
       },
     });
     request(t.context.requestOptions);
+  });
+});
+
+test('using sendMessage after receiving a message defaults to pageId that received update', (t) => {
+  t.plan(4);
+
+  const textUpdate = incomingUpdateFixtures.textUpdate(null);
+  textUpdate.recipient.id = Object.keys(
+    config.messengerMultiPageCredentials().pages)[1];
+  textUpdate.sender.id = config.messengerUserId();
+  delete textUpdate.raw;
+
+  t.context.multiPageRequestOptions.body.entry[0].messaging.push(textUpdate);
+  t.context.multiPageRequestOptions.headers = {
+    'x-hub-signature': getMessengerSignatureHeader(
+    t.context.multiPageRequestOptions.body, config.messengerCredentials().fbAppSecret),
+  };
+
+  return new Promise(async (resolve) => {
+    t.context.multiPageBotmaster.use({
+      type: 'incoming',
+      controller: async (bot, update) => {
+        const body = await bot.reply(update, 'Bye you');
+        t.truthy(body.raw);
+        delete body.raw;
+        t.truthy(body.message_id);
+        delete body.message_id;
+        t.snapshot(body);
+        // Also, using getUserInfo works...
+        const userInfo = await bot.getUserInfo(update.sender.id);
+        delete userInfo.profile_pic;
+        t.snapshot(userInfo);
+        resolve();
+      },
+    });
+
+    request(t.context.multiPageRequestOptions);
   });
 });
 
