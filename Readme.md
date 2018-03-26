@@ -39,6 +39,7 @@ To find your Facebook App Secret (`fbAppSecret`), navigate to your apps dashboar
 
 Example code using a single page for a bot. When using a single page, botmaster can be used
 as expected.
+
 ```js
 const Botmaster = require('botmaster');
 const MessengerBot = require('botmaster-messenger');
@@ -67,6 +68,7 @@ botmaster.use({
 ```
 
 multi-page bot example
+
 ```js
 const Botmaster = require('botmaster');
 const MessengerBot = require('botmaster-messenger');
@@ -74,12 +76,16 @@ const botmaster = new Botmaster();
 
 const messengerSettings = {
   credentials: {
-    verifyToken: 'YOUR verifyToken',
+    verifyToken: 'YOUR_VERIFY_TOKEN',
+    fbAppSecret: 'YOUR_FB_APP_SECRET',
     pages: {
-      'PAGE_ID_1': { pageToken: 'PAGE_TOKEN_1' },
-      'PAGE_ID_2': { pageToken: 'PAGE_TOKEN_2' }
-    }
-    fbAppSecret: 'YOUR fbAppSecret',
+      'YOUR_PAGE_ID_1': {
+        pageToken: 'YOUR_PAGE_TOKEN_1',
+      },
+      'YOUR_PAGE_ID_2': {
+        pageToken: 'YOUR_PAGE_ID_2',
+      },
+    },
   },
   webhookEndpoint: 'webhook1234',
 };
@@ -92,7 +98,7 @@ botmaster.use({
   type: 'incoming',
   name: 'my-middleware',
   controller: (bot, update) => {
-    const messageToSend = bot.createOutgoingMessageFor(userId);
+    const messageToSend = bot.createOutgoingMessageFor(update.sender.id); // or any other page-scoped userId you know is using your page
     messageToSend.addText('Hello World');
     messageToSend.sender = {
       id: 'PAGE_ID_2', // or whichever page id you wish to send the message from.
@@ -103,7 +109,7 @@ botmaster.use({
 ```
 
 With a multi-page bot, you will not be able to use the helper sender functions; namely,
-reply, and all the send* helper methods attached to bot instances. However, ever since the
+reply, and all the send\* helper methods attached to bot instances. However, ever since the
 OutgoingMessage class was made accessible via the `bot.createOutgoingMessage`
 and `bot.createOutgoingMessageFor` methods, it is easier to use that and its helper functions
 regardless of whether the bot is multi-page or not.
@@ -154,13 +160,17 @@ const messengerBot = new MessengerBot({
 // multi-page bot
 const messengerBot = new MessengerBot({
   credentials: {
-    verifyToken: 'YOUR verifyToken',
+    verifyToken: 'YOUR_VERIFY_TOKEN',
+    fbAppSecret: 'YOUR_FB_APP_SECRET',
     pages: {
-      [pageId1]: { pageToken: 'pageToken1'},
-      [pageId2]: { pageToken: 'pageToken2},
+      'YOUR_PAGE_ID_1': {
+         pageToken: 'YOUR_PAGE_TOKEN_1',
+       },
+      'YOUR_PAGE_ID_2': {
+         pageToken: 'YOUR_PAGE_TOKEN_2',
+       },
       etc...
-    }
-    fbAppSecret: 'YOUR fbAppSecret',
+    },
   },
   webhookEndpoint: 'someEndpoint'
 })

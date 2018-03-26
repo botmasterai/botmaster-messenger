@@ -65,7 +65,7 @@ test('/webhook should respond with an error in the body if signature is wrong', 
   });
 });
 
-test.only('/webhook should call incoming middleware when update is well formatted', (t) => {
+test('/webhook should call incoming middleware when update is well formatted', (t) => {
   t.plan(3);
 
   const textUpdate = incomingUpdateFixtures.textUpdate(null);
