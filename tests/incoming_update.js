@@ -11,6 +11,7 @@ test.beforeEach((t) => {
   return new Promise((resolve) => {
     t.context.botmaster = new Botmaster();
     const bot = new MessengerBot({
+      id: 'bot_id',
       credentials: config.messengerCredentials(),
       webhookEndpoint: 'webhook',
     });
@@ -64,8 +65,8 @@ test('/webhook should respond with an error in the body if signature is wrong', 
   });
 });
 
-test('/webhook should call incoming middleware when update is well formatted', (t) => {
-  t.plan(6);
+test.only('/webhook should call incoming middleware when update is well formatted', (t) => {
+  t.plan(3);
 
   const textUpdate = incomingUpdateFixtures.textUpdate(null);
   // because fixtures set it to undefined if called without params and because
@@ -79,7 +80,6 @@ test('/webhook should call incoming middleware when update is well formatted', (
     t.context.requestOptions.body, config.messengerCredentials().fbAppSecret),
   };
 
-  let pass = 0; // using this just to go through the "else" branch in __setBotIdIfNotSet
   return new Promise(async (resolve) => {
     t.context.botmaster.use({
       type: 'incoming',
@@ -88,14 +88,9 @@ test('/webhook should call incoming middleware when update is well formatted', (
         t.deepEqual(update.raw, t.context.requestOptions.body.entry[0]);
         delete update.raw;
         t.deepEqual(update, textUpdate);
-        pass += 1;
-        if (pass === 2) {
-          resolve();
-        }
+        resolve();
       },
     });
-
-    request(t.context.requestOptions);
     request(t.context.requestOptions);
   });
 });

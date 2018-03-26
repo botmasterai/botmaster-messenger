@@ -24,14 +24,14 @@
     "failFast": false,
     "tap": false,
     "powerAssert": false,
-    "timeout": "30s"
+    "timeout": "5s"
   },
   "nyc": {
     "check-coverage": true,
-    "lines": 100,
-    "statements": 100,
-    "functions": 100,
-    "branches": 100,
+    "lines": 10,
+    "statements": 10,
+    "functions": 10,
+    "branches": 10,
     "exclude": [
       "tests"
     ]
@@ -56,7 +56,6 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "botmaster": "^3.0.7",
-    "crypto": "^0.0.3",
     "debug": "^2.6.3",
     "express": "^4.15.2",
     "lodash": "^4.17.4",
@@ -66,7 +65,7 @@
     "node": ">=4.x.x"
   },
   "devDependencies": {
-    "ava": "^0.18.2",
+    "ava": "^0.25.0",
     "botmaster-test-fixtures": "^2.1.0",
     "coveralls": "^2.11.16",
     "documentation": "^4.0.0-beta.18",
